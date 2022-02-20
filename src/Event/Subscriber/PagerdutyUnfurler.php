@@ -2,18 +2,23 @@
 
 namespace PagerdutySlackUnfurl\Event\Subscriber;
 
+use PagerdutySlackUnfurl\PagerdutyClient;
 use SlackUnfurl\Event\Events;
 use SlackUnfurl\Event\UnfurlEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PagerdutyUnfurler implements EventSubscriberInterface
 {
+    /** @var PagerdutyClient */
+    private $client;
     /** @var string */
     private $domain;
 
     public function __construct(
+        PagerdutyClient $client,
         string $domain
     ) {
+        $this->client = $client;
         $this->domain = $domain;
     }
 

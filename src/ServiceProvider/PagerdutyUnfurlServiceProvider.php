@@ -21,6 +21,7 @@ class PagerdutyUnfurlServiceProvider implements ServiceProviderInterface, EventL
             $domain = parse_url($app['pagerduty.url'], PHP_URL_HOST);
 
             return new PagerdutyUnfurler(
+                $app[PagerdutyClient::class],
                 $domain,
             );
         };
