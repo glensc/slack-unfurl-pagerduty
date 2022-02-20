@@ -10,6 +10,11 @@
             "PagerdutySlackUnfurl\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "PagerdutySlackUnfurl\\Test\\": "tests/"
+        }
+    },
     "require": {
         "php": "^7.1.3",
         "symfony/http-client": "^5.4"
