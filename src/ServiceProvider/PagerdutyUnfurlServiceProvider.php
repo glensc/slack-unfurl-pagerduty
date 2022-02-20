@@ -3,10 +3,13 @@
 namespace PagerdutySlackUnfurl\ServiceProvider;
 
 use PagerdutySlackUnfurl\Event\Subscriber\PagerdutyUnfurler;
+use PagerdutySlackUnfurl\PagerdutyClient;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\EventListenerProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PagerdutyUnfurlServiceProvider implements ServiceProviderInterface, EventListenerProviderInterface
 {
@@ -18,7 +21,19 @@ class PagerdutyUnfurlServiceProvider implements ServiceProviderInterface, EventL
             $domain = parse_url($app['pagerduty.url'], PHP_URL_HOST);
 
             return new PagerdutyUnfurler(
+                $app[PagerdutyClient::class],
                 $domain,
+            );
+        };
+
+        $app[HttpClientInterface::class] = static function () {
+            return HttpClient::create();
+        };
+
+        $app[PagerdutyClient::class] = static function ($app) {
+            return new PagerdutyClient(
+                $app[HttpClientInterface::class],
+                getenv('PAGERDUTY_TOKEN')
             );
         };
     }
