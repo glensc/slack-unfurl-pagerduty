@@ -3,6 +3,7 @@
 namespace PagerdutySlackUnfurl\ServiceProvider;
 
 use PagerdutySlackUnfurl\Event\Subscriber\PagerdutyUnfurler;
+use PagerdutySlackUnfurl\PagerdutyClient;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\EventListenerProviderInterface;
@@ -26,6 +27,13 @@ class PagerdutyUnfurlServiceProvider implements ServiceProviderInterface, EventL
 
         $app[HttpClientInterface::class] = static function () {
             return HttpClient::create();
+        };
+
+        $app[PagerdutyClient::class] = static function ($app) {
+            return new PagerdutyClient(
+                $app[HttpClientInterface::class],
+                getenv('PAGERDUTY_TOKEN')
+            );
         };
     }
 
