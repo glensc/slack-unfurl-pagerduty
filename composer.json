@@ -15,6 +15,7 @@
         "symfony/http-client": "^5.4"
     },
     "require-dev": {
-        "glen/slack-unfurl": "^0.10.2"
+        "glen/slack-unfurl": "^0.10.2",
+        "phpunit/phpunit": "^9.5"
     }
 }
