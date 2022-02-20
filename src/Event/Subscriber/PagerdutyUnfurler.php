@@ -33,8 +33,31 @@ class PagerdutyUnfurler implements EventSubscriberInterface
     {
         foreach ($event->getMatchingLinks($this->domain) as $link) {
             $url = $link['url'];
-            $unfurl = [];
-            $event->addUnfurl($url, $unfurl);
+            $unfurl = $this->getIncidentUnfurl($url);
+            if ($unfurl) {
+                $event->addUnfurl($url, $unfurl);
+            }
         }
+    }
+
+    private function getIncidentUnfurl(string $url): ?array
+    {
+        $details = $this->getIncidentDetails($url);
+        if (!$details) {
+            return null;
+        }
+
+        return [
+            'title' => "<$url|${details['type']}: {$details['title']} ({$details['status']})",
+        ];
+    }
+
+    private function getIncidentDetails(string $url): ?array
+    {
+        if (!preg_match("#^https?://\Q{$this->domain}\E/incidents/(?P<incidentId>[\w\d]+)#", $url, $m)) {
+            return null;
+        }
+
+        return $this->client->getIncident($m['incidentId'])['incident'] ?? null;
     }
 }
