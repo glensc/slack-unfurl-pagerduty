@@ -7,6 +7,8 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\EventListenerProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PagerdutyUnfurlServiceProvider implements ServiceProviderInterface, EventListenerProviderInterface
 {
@@ -20,6 +22,10 @@ class PagerdutyUnfurlServiceProvider implements ServiceProviderInterface, EventL
             return new PagerdutyUnfurler(
                 $domain,
             );
+        };
+
+        $app[HttpClientInterface::class] = static function () {
+            return HttpClient::create();
         };
     }
 
