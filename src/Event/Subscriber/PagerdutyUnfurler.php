@@ -5,10 +5,13 @@ namespace PagerdutySlackUnfurl\Event\Subscriber;
 use PagerdutySlackUnfurl\PagerdutyClient;
 use SlackUnfurl\Event\Events;
 use SlackUnfurl\Event\UnfurlEvent;
+use SlackUnfurl\Traits\SlackEscapeTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PagerdutyUnfurler implements EventSubscriberInterface
 {
+    use SlackEscapeTrait;
+
     /** @var PagerdutyClient */
     private $client;
     /** @var string */
@@ -47,8 +50,9 @@ class PagerdutyUnfurler implements EventSubscriberInterface
             return null;
         }
 
+
         return [
-            'title' => "<$url|${details['type']}: {$details['title']} ({$details['status']})",
+            'title' => $this->createLink($url, "${details['type']}: {$details['title']} ({$details['status']})"),
         ];
     }
 
