@@ -14,8 +14,11 @@
         "php": "^7.1.3",
         "symfony/http-client": "^5.4"
     },
+    "conflict": {
+        "glen/slack-unfurl": "<0.11.0"
+    },
     "require-dev": {
-        "glen/slack-unfurl": "^0.10.2",
+        "glen/slack-unfurl": "^0.11.0",
         "phpunit/phpunit": "^9.5"
     }
 }
